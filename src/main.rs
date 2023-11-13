@@ -21,8 +21,10 @@ impl fmt::Display for PackageHealth {
 
 fn main() {
     let metadata = MetadataCommand::new().exec().unwrap();
+    let root_package = metadata.root_package().unwrap();
     let mut healths = metadata.packages
         .iter()
+        .filter(|pkg| pkg.id != root_package.id)
         .map(health_of_package)
         .collect::<Vec<_>>();
     healths.sort_by(|pa, pb| pa.score().partial_cmp(&pb.score()).unwrap());
@@ -32,6 +34,7 @@ fn main() {
 }
 
 fn health_of_package(pkg: &Package) -> PackageHealth {
-    println!("{:?}", pkg.authors);
-    PackageHealth { name: pkg.name.to_owned(), maintainers_last_month: 2 }
+    let maintainers_last_month = 2;
+    println!("{}", pkg.repository.as_ref().unwrap());
+    PackageHealth { name: pkg.name.to_owned(), maintainers_last_month }
 }
