@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 cargo_metadata = "0.18.1"
+octocrab = "0.32.0"
