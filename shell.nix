@@ -6,6 +6,10 @@
       llvmPackages.bintools
       rustup
     ];
+    nativeBuildInputs = with pkgs; [
+      pkg-config
+      openssl
+    ];
     RUSTC_VERSION = pkgs.lib.readFile ./rust-toolchain;
     # https://github.com/rust-lang/rust-bindgen#environment-variables
     LIBCLANG_PATH = pkgs.lib.makeLibraryPath [ pkgs.llvmPackages_latest.libclang.lib ];
