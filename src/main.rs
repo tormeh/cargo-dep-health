@@ -1,6 +1,8 @@
 use core::fmt;
 
 use cargo_metadata::{MetadataCommand, Package};
+use git2::Repository;
+use temp_dir::TempDir;
 
 struct PackageHealth {
     name: String,
@@ -34,7 +36,11 @@ fn main() {
 }
 
 fn health_of_package(pkg: &Package) -> PackageHealth {
+    let tmp_dir = TempDir::new().unwrap();
+    let url = pkg.repository.as_ref().unwrap();
+    let repo = Repository::clone(url, tmp_dir.path()).unwrap();
+    repo.branches(filter);
     let maintainers_last_month = 2;
-    println!("{}", pkg.repository.as_ref().unwrap());
+    println!("{}", url);
     PackageHealth { name: pkg.name.to_owned(), maintainers_last_month }
 }
